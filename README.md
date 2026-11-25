@@ -1,11 +1,11 @@
 # Інформаційна система моніторингу якості води
 
 Курсова робота з кросплатформеного програмування, варіант № 8, група 202-ТН.
-Матеріали першої контрольної точки.
+Матеріали другої контрольної точки.
 
 ## Структура
 
-- `server/` — Maven-проєкт Java 21, MySQL Connector/J і клас `DBUtil`.
+- `server/` — Maven-проєкт Java 21, моделі, CRUD через JDBC і сервісний рівень.
 - `client/` — окремий Maven-проєкт Java 21 з початковим файлом `sample-data/measurements.csv`.
 - `database.sql` — схема MySQL і демонстраційні дані.
 - `diagrams/` — вихідні файли схем diagrams.net і зображення PNG.
@@ -39,4 +39,13 @@ mvn -f client/pom.xml clean compile
 зареєстрованої проби `S-002` (ID 2 у демонстраційній БД). Кодування UTF-8,
 роздільник — крапка з комою, десятковий знак — крапка. Вимірювання і контрольні
 межі в SQL та CSV є навчальними значеннями.
+
+## Серверні операції другого етапу
+
+У пакеті `ua.edu.nupp.kpp.server` класи `ObservationPointService`,
+`WaterSampleService`, `MeasurementService` і `SampleCheckService` надають
+операції `add`, `getAll`, `getById`, `update` і `delete`.
+`WaterSampleService.calculateRisk(1)` для початкової проби `S-001`
+повертає показник `50.00`. `WaterSampleService.changeState` перевіряє
+допустимість переходу й умови для наступного стану.
 
