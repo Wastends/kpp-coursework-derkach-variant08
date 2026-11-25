@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="schema" name="Схема">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1150" pageHeight="306">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="JavaFX" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="22" y="51" width="260" height="66" />
+        </mxCell>
+        <mxCell id="3" value="HTTP-клієнт" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="322" y="51" width="260" height="66" />
+        </mxCell>
+        <mxCell id="4" value="Servlet" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="842" y="51" width="260" height="66" />
+        </mxCell>
+        <mxCell id="5" value="Service" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="842" y="203" width="260" height="66" />
+        </mxCell>
+        <mxCell id="6" value="DAO / JDBC" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="542" y="203" width="260" height="66" />
+        </mxCell>
+        <mxCell id="7" value="MySQL" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=1;fontFamily=Arial;fontSize=30;fontStyle=1;fontColor=#162638;fillColor=#EDF3F8;strokeColor=#51677D;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="242" y="203" width="260" height="66" />
+        </mxCell>
+        <mxCell id="8" value="" style="edgeStyle=segmentEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#51677D;startArrow=block;endArrow=block;endFill=1;startFill=1;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="282" y="84" />
+            <mxPoint as="targetPoint" x="322" y="84" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9" value="" style="edgeStyle=segmentEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#51677D;startArrow=block;endArrow=block;endFill=1;startFill=1;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="582" y="84" />
+            <mxPoint as="targetPoint" x="842" y="84" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="10" value="" style="edgeStyle=segmentEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#51677D;startArrow=block;endArrow=block;endFill=1;startFill=1;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="972" y="117" />
+            <mxPoint as="targetPoint" x="972" y="203" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="11" value="" style="edgeStyle=segmentEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#51677D;startArrow=block;endArrow=block;endFill=1;startFill=1;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="842" y="236" />
+            <mxPoint as="targetPoint" x="802" y="236" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="12" value="" style="edgeStyle=segmentEdgeStyle;rounded=0;strokeWidth=3;strokeColor=#51677D;startArrow=block;endArrow=block;endFill=1;startFill=1;" edge="1" parent="1">
+          <mxGeometry as="geometry" relative="1">
+            <mxPoint as="sourcePoint" x="542" y="236" />
+            <mxPoint as="targetPoint" x="502" y="236" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="13" value="HTTP / JSON" style="align=center;verticalAlign=middle;spacingLeft=10;whiteSpace=wrap;html=0;rounded=0;fontFamily=Arial;fontSize=25;fontStyle=0;fontColor=#162638;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="600" y="46" width="219" height="33" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
