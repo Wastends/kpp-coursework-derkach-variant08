@@ -1,51 +1,59 @@
 # Інформаційна система моніторингу якості води
 
 Курсова робота з кросплатформеного програмування, варіант № 8, група 202-ТН.
-Матеріали другої контрольної точки.
+На третьому етапі сервер працює в Apache Tomcat 9, а настільний інтерфейс — у JavaFX.
 
-## Структура
+## Що потрібно
 
-- `server/` — Maven-проєкт Java 21, моделі, CRUD через JDBC і сервісний рівень.
-- `client/` — окремий Maven-проєкт Java 21 з початковим файлом `sample-data/measurements.csv`.
-- `database.sql` — схема MySQL і демонстраційні дані.
-- `diagrams/` — вихідні файли схем diagrams.net і зображення PNG.
+- Java Development Kit 21 і Maven.
+- Apache Tomcat 9.x з Java 21.
+- MySQL або сумісний сервер із XAMPP.
 
-## Перевірка Maven-проєктів
+## Як запустити
 
-Перевірте версії: `java -version`, `javac -version` і `mvn -version`.
-У всіх трьох командах Java має бути версії 21. З кореня проєкту виконайте:
+1. У XAMPP увімкніть MySQL. Якщо імпортуєте через phpMyAdmin, увімкніть також
+   Apache й відкрийте http://localhost/phpmyadmin.
+2. Імпортуйте кореневий файл database.sql. Він заново створює навчальну базу
+   kpp_water_quality_v08 та записує демонстраційні дані.
+3. У терміналі кореневої папки виконайте «mvn -f server/pom.xml clean package».
+   Готовий файл — server/target/water-quality-server.war.
+4. Скопіюйте WAR у папку webapps вашого Tomcat. Запустіть bin/catalina.bat run
+   на Windows або bin/catalina.sh run на Linux та macOS.
+5. Відкрийте http://localhost:8080/water-quality-server/points. Правильна
+   відповідь — JSON-масив із пунктами спостереження.
+6. В іншому терміналі виконайте «mvn -f client/pom.xml javafx:run».
 
-```powershell
-mvn -f server/pom.xml clean compile
-mvn -f client/pom.xml clean compile
-```
+Параметри JDBC за замовчуванням — localhost:3306, користувач root і порожній
+пароль. Для власного середовища задайте KPP_DB_URL, KPP_DB_USER і
+KPP_DB_PASSWORD перед запуском Tomcat. Для клієнта KPP_API_URL змінює базову
+адресу http://localhost:8080/water-quality-server.
 
-У XAMPP запустіть Apache і MySQL. Відкрийте `http://localhost/phpmyadmin`,
-виберіть «Імпорт» і завантажте `database.sql`. Скрипт видаляє і заново створює
-лише навчальну базу `kpp_water_quality_v08`. Використовуйте його для демонстраційних даних.
-Після імпорту в БД має бути 4 таблиці: `observation_point` (2 записи),
-`water_sample` (2), `measurement` (3) і `sample_check` (1).
+В IntelliJ IDEA можна окремо імпортувати server/pom.xml і client/pom.xml як
+Maven-проєкти з JDK 21. Збірка сервера доступна через Lifecycle → package.
+Для клієнта у вікні Maven виконайте javafx:run.
 
-`DBUtil.getConnection()` за замовчуванням підключається до
-`jdbc:mysql://localhost:3306/kpp_water_quality_v08` як локальний користувач `root`
-із порожнім паролем. Інші параметри можна задати в середовищі процесу Java
-через `KPP_DB_URL`, `KPP_DB_USER` і `KPP_DB_PASSWORD`.
-Якщо IntelliJ IDEA використовує окрему конфігурацію запуску, ці змінні можна
-задати в її полі Environment variables.
+## HTTP-маршрути
 
-## Початкові дані CSV
+| Шлях | Дані |
+| --- | --- |
+| /points | Пункти спостереження |
+| /samples | Проби води |
+| /measurements | Вимірювання |
+| /checks | Перевірки |
 
-У `client/sample-data/measurements.csv` — два додаткові вимірювання для
-зареєстрованої проби `S-002` (ID 2 у демонстраційній БД). Кодування UTF-8,
-роздільник — крапка з комою, десятковий знак — крапка. Вимірювання і контрольні
-межі в SQL та CSV є навчальними значеннями.
+GET повертає JSON-масив. Параметр id дозволяє отримати один запис. Для
+змін використовуйте POST з application/x-www-form-urlencoded і параметром
+action зі значенням add, update або delete. Для update і delete
+потрібен id. При створенні відповідь має HTTP 201 та поле «id».
 
-## Серверні операції другого етапу
+GET /samples?action=risk&id=1 обчислює показник для проби S-001.
+Для початкових даних I = 50.00. POST /samples з action=transition, id і
+state виконує зміну стану. Бізнес-правила перевіряє сервісний рівень.
 
-У пакеті `ua.edu.nupp.kpp.server` класи `ObservationPointService`,
-`WaterSampleService`, `MeasurementService` і `SampleCheckService` надають
-операції `add`, `getAll`, `getById`, `update` і `delete`.
-`WaterSampleService.calculateRisk(1)` для початкової проби `S-001`
-повертає показник `50.00`. `WaterSampleService.changeState` перевіряє
-допустимість переходу й умови для наступного стану.
+## CSV
+
+Виберіть «Вимірювання» → «Імпортувати 1 рядок CSV» і відкрийте
+client/sample-data/measurements.csv. У таблиці з’явиться перше вимірювання
+з файла. Формат — UTF-8, роздільник «;», десяткова крапка. Обробка всього
+файла через JavaFX Task передбачена четвертим етапом.
 

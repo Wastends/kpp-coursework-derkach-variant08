@@ -1,0 +1,63 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 13px;
+    -fx-base: #edf5f7;
+    -fx-background: #f3f7f9;
+    -fx-accent: #126774;
+    -fx-focus-color: #177982;
+}
+
+.app-header {
+    -fx-padding: 18 24 17 24;
+    -fx-background-color: #133849;
+}
+
+.app-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.server-address {
+    -fx-font-size: 12px;
+    -fx-text-fill: #c1dce3;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: #dfedf1;
+}
+
+.tab-pane > .tab-header-area .tab {
+    -fx-padding: 8 14 8 14;
+}
+
+.tab-pane > .tab-header-area .tab:selected {
+    -fx-background-color: #f3f7f9;
+}
+
+.editor {
+    -fx-padding: 14;
+    -fx-background-color: #ffffff;
+}
+
+.editor-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #173c4e;
+}
+
+.accent-button {
+    -fx-background-color: #126774;
+    -fx-text-fill: #ffffff;
+}
+
+.risk-value {
+    -fx-text-fill: #174858;
+    -fx-font-weight: bold;
+}
+
+.tab-status {
+    -fx-padding: 5 8 5 8;
+    -fx-background-color: #e4f0f3;
+    -fx-text-fill: #264a56;
+}
