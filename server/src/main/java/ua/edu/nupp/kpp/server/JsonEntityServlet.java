@@ -71,10 +71,13 @@ abstract class JsonEntityServlet<T> extends HttpServlet {
         try {
             result = action.run();
         } catch (IllegalArgumentException | IllegalStateException error) {
+            logRejected(request, HttpServletResponse.SC_BAD_REQUEST);
             result = error(HttpServletResponse.SC_BAD_REQUEST, error.getMessage());
         } catch (NoSuchElementException error) {
+            logRejected(request, HttpServletResponse.SC_NOT_FOUND);
             result = error(HttpServletResponse.SC_NOT_FOUND, error.getMessage());
         } catch (SQLIntegrityConstraintViolationException error) {
+            logRejected(request, HttpServletResponse.SC_BAD_REQUEST);
             result = error(HttpServletResponse.SC_BAD_REQUEST,
                     "Операцію відхилено. Перевірте унікальність полів і зв’язки між записами.");
         } catch (SQLException | RuntimeException error) {
@@ -86,6 +89,10 @@ abstract class JsonEntityServlet<T> extends HttpServlet {
         response.setCharacterEncoding(UTF_8);
         response.setContentType("application/json");
         JSON.writeValue(response.getWriter(), result.body());
+    }
+
+    private static void logRejected(HttpServletRequest request, int status) {
+        LOG.warning(() -> "Відхилено " + request.getMethod() + " " + request.getServletPath() + " (HTTP " + status + ")");
     }
 
     private static Result error(int status, String message) {
