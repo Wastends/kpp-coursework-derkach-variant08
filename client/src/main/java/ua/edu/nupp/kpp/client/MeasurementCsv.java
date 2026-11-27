@@ -1,11 +1,12 @@
 package ua.edu.nupp.kpp.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 final class MeasurementCsv {
 
@@ -14,27 +15,31 @@ final class MeasurementCsv {
     private MeasurementCsv() {
     }
 
-    static Measurement readFirst(Path file) throws IOException {
-        try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-            String header = reader.readLine();
-            if (header == null || !HEADER.equals(header.replaceFirst("^\uFEFF", "").strip())) {
-                throw new IOException("Невідомий заголовок CSV. Використайте формат measurements.csv.");
-            }
-
-            String row;
-            int line = 1;
-            while ((row = reader.readLine()) != null) {
-                line++;
-                if (!row.isBlank()) {
-                    return parse(row, line);
-                }
-            }
-            throw new IOException("У CSV немає рядків вимірювань.");
-        }
+    record Row(int number, String text) {
     }
 
-    private static Measurement parse(String row, int line) throws IOException {
-        String[] columns = row.split(";", -1);
+    static List<Row> readRows(Path file) throws IOException {
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(file, StandardCharsets.UTF_8);
+        } catch (IOException error) {
+            throw new IOException("Не вдалося прочитати CSV-файл «" + file.getFileName() + "».", error);
+        }
+        if (lines.isEmpty() || !HEADER.equals(lines.getFirst().replaceFirst("^\uFEFF", "").strip())) {
+            throw new IOException("Невідомий заголовок CSV. Використайте формат measurements.csv.");
+        }
+        List<Row> rows = new ArrayList<>();
+        for (int i = 1; i < lines.size(); i++) {
+            if (!lines.get(i).isBlank()) {
+                rows.add(new Row(i + 1, lines.get(i)));
+            }
+        }
+        return rows;
+    }
+
+    static Measurement parse(Row row) throws IOException {
+        int line = row.number();
+        String[] columns = row.text().split(";", -1);
         if (columns.length != 5) {
             throw new IOException("Рядок " + line + " має містити п’ять полів, розділених «;».");
         }

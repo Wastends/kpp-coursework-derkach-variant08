@@ -106,6 +106,18 @@ final class CrudPane<T> extends BorderPane {
         node.disableProperty().bind(busy);
     }
 
+    boolean beginExternalTask() {
+        if (busy.get()) {
+            return false;
+        }
+        busy.set(true);
+        return true;
+    }
+
+    void endExternalTask() {
+        busy.set(false);
+    }
+
     void onSelection(Consumer<T> consumer) {
         table.getSelectionModel().selectedItemProperty().addListener((property, old, value) -> consumer.accept(value));
     }

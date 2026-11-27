@@ -15,13 +15,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -150,30 +146,9 @@ public final class MainApp extends Application {
                         m.getMeasuredValue().toPlainString(), m.getLimitValue().toPlainString()),
                 (id, f) -> new Measurement(id, f.id(0), f.text(1), f.text(2), f.decimal(3), f.decimal(4)));
         var pane = new CrudPane<>(api.measurements, table, form, Measurement::getId, executor);
-        Button importCsv = new Button("Імпортувати 1 рядок CSV");
-        pane.disableWhileBusy(importCsv);
-        importCsv.setOnAction(event -> chooseCsv(pane, api));
         pane.extra(new Separator());
-        pane.extra(importCsv);
+        pane.extra(new CsvImportPane(pane, api, executor));
         return pane;
-    }
-
-    private void chooseCsv(CrudPane<Measurement> pane, HttpWaterQualityClient api) {
-        FileChooser picker = new FileChooser();
-        picker.setTitle("Виберіть файл вимірювань");
-        picker.getExtensionFilters().add(new FileChooser.ExtensionFilter("Файли CSV", "*.csv"));
-        Path sampleData = Path.of("sample-data");
-        if (!Files.isDirectory(sampleData)) {
-            sampleData = Path.of("client", "sample-data");
-        }
-        if (Files.isDirectory(sampleData)) {
-            picker.setInitialDirectory(sampleData.toFile());
-        }
-        File file = picker.showOpenDialog(pane.getScene().getWindow());
-        if (file != null) {
-            pane.run(() -> api.measurements.add(MeasurementCsv.readFirst(file.toPath())),
-                    id -> pane.refresh(id, "Імпортовано один рядок CSV. ", false), true, "");
-        }
     }
 
     private CrudPane<SampleCheck> checks(HttpWaterQualityClient api) {
