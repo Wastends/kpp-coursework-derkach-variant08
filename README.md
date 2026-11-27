@@ -46,6 +46,66 @@ KPP_DB_PASSWORD перед запуском Tomcat. Для клієнта KPP_AP
 Maven-проєкти з JDK 21. Збірка сервера доступна через Lifecycle → package.
 Для клієнта у вікні Maven виконайте javafx:run.
 
+## Запуск у Windows через IntelliJ IDEA (покроково)
+
+1. У XAMPP запустіть **MySQL**. Apache потрібен лише для phpMyAdmin.
+   Не запускайте вбудований Tomcat XAMPP, якщо використовуєте окремий Tomcat 9:
+   два сервери не повинні одночасно використовувати порт 8080.
+2. Імпортуйте `database.sql` через phpMyAdmin тільки для початкової підготовки
+   бази. Повторний імпорт видаляє попередні записи цієї бази.
+3. У панелі Maven розгорніть **server → Lifecycle → package** або виконайте
+   з кореня проєкту:
+
+```powershell
+mvn -f server/pom.xml clean package
+```
+
+   Після `BUILD SUCCESS` з'явиться `server/target/water-quality-server.war`.
+   Якщо команда mvn недоступна у терміналі, скористайтеся Maven-панеллю IntelliJ IDEA.
+
+4. Зупиніть попередній запуск Tomcat (Ctrl+C у його консолі).
+   У терміналі PowerShell, відкритому в корені проєкту, виконайте
+   (шляхи наведено як приклад; замініть їх на свої, якщо потрібно):
+
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Java\latest\jdk-21"
+$tomcat = "C:\apache-tomcat-9.0.124"
+Copy-Item ".\server\target\water-quality-server.war" "$tomcat\webapps\"
+& "$tomcat\bin\catalina.bat" run
+```
+
+   У JAVA_HOME вказують папку JDK, а не її підпапку bin.
+   Команда Copy-Item у разі успіху зазвичай не виводить повідомлень.
+   Не перейменовуйте WAR: його ім'я визначає контекст /water-quality-server.
+   Залиште термінал відкритим після повідомлення `Server startup in ... milliseconds`.
+
+5. Відкрийте [контрольний URL](http://localhost:8080/water-quality-server/points).
+   Очікується HTTP 200 з JSON-масивом, а не просто стартова сторінка Tomcat.
+6. У Maven-панелі розгорніть **client → Plugins → javafx → javafx:run**
+   або в іншому терміналі з кореня проєкту виконайте:
+
+```powershell
+mvn -f client/pom.xml javafx:run
+```
+
+   Якщо видно лише server, додайте client/pom.xml як окремий Maven-проєкт.
+7. У вкладці «Вимірювання» натисніть «Імпортувати CSV» та виберіть
+   `client/sample-data/measurements.csv` у системному вікні вибору файла.
+   Відкриття цього вікна є штатною поведінкою. На початкових даних очікується
+   3 → 5 записів: два збережені рядки, жодного пропущеного.
+
+### Діагностика запуску
+
+| Симптом | Що перевірити |
+| --- | --- |
+| Neither the JAVA_HOME nor the JRE_HOME environment variable is defined | Задати JAVA_HOME в тому ж терміналі перед запуском Tomcat |
+| HTTP 404 на /water-quality-server/points | Перевірити файл water-quality-server.war у webapps, контекст застосунку та журнал розгортання |
+| HTTP 500 | Перевірити MySQL, наявність бази та реквізити JDBC |
+| Connection refused | Перевірити, чи працює Tomcat, порт і KPP_API_URL |
+| Порт 8080 зайнятий | Не запускати одночасно два Tomcat; зупинити зайвий сервер або налаштувати інший порт і KPP_API_URL |
+| javafx:run відсутній | Підключити client/pom.xml, оновити Maven та перевірити JDK 21 |
+| Повторний імпорт CSV відхилено | Перевірити, чи ці вимірювання вже існують у пробі; дублювання заборонене |
+
 ## HTTP-маршрути
 
 | Шлях | Дані |
